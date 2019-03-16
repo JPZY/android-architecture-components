@@ -41,7 +41,7 @@ class GithubServiceTest {
     @JvmField
     val instantExecutorRule = InstantTaskExecutorRule()
 
-    private lateinit var service: GithubService
+    private lateinit var service: com.android.example.github.api.GithubService
 
     private lateinit var mockWebServer: MockWebServer
 
@@ -53,7 +53,7 @@ class GithubServiceTest {
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(LiveDataCallAdapterFactory())
             .build()
-            .create(GithubService::class.java)
+            .create(com.android.example.github.api.GithubService::class.java)
     }
 
     @After
@@ -64,7 +64,7 @@ class GithubServiceTest {
     @Test
     fun getUser() {
         enqueueResponse("user-yigit.json")
-        val yigit = (getValue(service.getUser("yigit")) as ApiSuccessResponse).body
+        val yigit = (getValue(service.getUser("yigit")) as com.android.example.github.api.ApiSuccessResponse).body
 
         val request = mockWebServer.takeRequest()
         assertThat(request.path, `is`("/users/yigit"))
@@ -78,7 +78,7 @@ class GithubServiceTest {
     @Test
     fun getRepos() {
         enqueueResponse("repos-yigit.json")
-        val repos = (getValue(service.getRepos("yigit")) as ApiSuccessResponse).body
+        val repos = (getValue(service.getRepos("yigit")) as com.android.example.github.api.ApiSuccessResponse).body
 
         val request = mockWebServer.takeRequest()
         assertThat(request.path, `is`("/users/yigit/repos"))
@@ -101,7 +101,7 @@ class GithubServiceTest {
     fun getContributors() {
         enqueueResponse("contributors.json")
         val value = getValue(service.getContributors("foo", "bar"))
-        val contributors = (value as ApiSuccessResponse).body
+        val contributors = (value as com.android.example.github.api.ApiSuccessResponse).body
         assertThat(contributors.size, `is`(3))
         val yigit = contributors[0]
         assertThat(yigit.login, `is`("yigit"))
@@ -120,7 +120,7 @@ class GithubServiceTest {
                 "link" to "$next,$last"
             )
         )
-        val response = getValue(service.searchRepos("foo")) as ApiSuccessResponse
+        val response = getValue(service.searchRepos("foo")) as com.android.example.github.api.ApiSuccessResponse
 
         assertThat(response, notNullValue())
         assertThat(response.body.total, `is`(41))

@@ -54,7 +54,7 @@ class NetworkBoundResourceTest(private val useRealExecutors: Boolean) {
 
     private lateinit var handleShouldMatch: (Foo?) -> Boolean
 
-    private lateinit var handleCreateCall: () -> LiveData<ApiResponse<Foo>>
+    private lateinit var handleCreateCall: () -> LiveData<com.android.example.github.api.ApiResponse<Foo>>
 
     private val dbData = MutableLiveData<Foo>()
 
@@ -89,7 +89,7 @@ class NetworkBoundResourceTest(private val useRealExecutors: Boolean) {
                 return dbData
             }
 
-            override fun createCall(): LiveData<ApiResponse<Foo>> {
+            override fun createCall(): LiveData<com.android.example.github.api.ApiResponse<Foo>> {
                 return handleCreateCall()
             }
         }
@@ -186,7 +186,7 @@ class NetworkBoundResourceTest(private val useRealExecutors: Boolean) {
             saved.set(true)
         }
         val body = ResponseBody.create(MediaType.parse("text/html"), "error")
-        val apiResponseLiveData = MutableLiveData<ApiResponse<Foo>>()
+        val apiResponseLiveData = MutableLiveData<com.android.example.github.api.ApiResponse<Foo>>()
         handleCreateCall = { apiResponseLiveData }
 
         val observer = mock<Observer<Resource<Foo>>>()
@@ -199,7 +199,7 @@ class NetworkBoundResourceTest(private val useRealExecutors: Boolean) {
         drain()
         verify(observer).onChanged(Resource.loading(dbValue))
 
-        apiResponseLiveData.value = ApiResponse.create(Response.error<Foo>(400, body))
+        apiResponseLiveData.value = com.android.example.github.api.ApiResponse.create(Response.error<Foo>(400, body))
         drain()
         assertThat(saved.get(), `is`(false))
         verify(observer).onChanged(Resource.error("error", dbValue))
@@ -221,7 +221,7 @@ class NetworkBoundResourceTest(private val useRealExecutors: Boolean) {
             saved.set(foo)
             dbData.setValue(dbValue2)
         }
-        val apiResponseLiveData = MutableLiveData<ApiResponse<Foo>>()
+        val apiResponseLiveData = MutableLiveData<com.android.example.github.api.ApiResponse<Foo>>()
         handleCreateCall = { apiResponseLiveData }
 
         val observer = mock<Observer<Resource<Foo>>>()
@@ -234,7 +234,7 @@ class NetworkBoundResourceTest(private val useRealExecutors: Boolean) {
         drain()
         val networkResult = Foo(1)
         verify(observer).onChanged(Resource.loading(dbValue))
-        apiResponseLiveData.value = ApiResponse.create(Response.success(networkResult))
+        apiResponseLiveData.value = com.android.example.github.api.ApiResponse.create(Response.success(networkResult))
         drain()
         assertThat(saved.get(), `is`(networkResult))
         verify(observer).onChanged(Resource.success(dbValue2))

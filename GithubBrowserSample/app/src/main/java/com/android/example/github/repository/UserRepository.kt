@@ -34,7 +34,7 @@ import javax.inject.Singleton
 class UserRepository @Inject constructor(
     private val appExecutors: AppExecutors,
     private val userDao: UserDao,
-    private val githubService: GithubService
+    private val githubService: com.android.example.github.api.GithubService
 ) {
 
     fun loadUser(login: String): LiveData<Resource<User>> {

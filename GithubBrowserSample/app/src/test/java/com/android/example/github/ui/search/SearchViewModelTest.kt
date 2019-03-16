@@ -75,7 +75,7 @@ class SearchViewModelTest {
         viewModel.setQuery("foo")
         verify(repository, never()).search("foo")
         // next page is user interaction and even if loading state is not observed, we query
-        // would be better to avoid that if main search query is not observed
+        // would be better to avoid that if benchmark search query is not observed
         viewModel.loadNextPage()
         verify(repository).searchNextPage("foo")
     }

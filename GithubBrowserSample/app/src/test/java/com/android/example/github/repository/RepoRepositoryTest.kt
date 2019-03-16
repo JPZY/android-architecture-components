@@ -56,7 +56,7 @@ import retrofit2.Response
 class RepoRepositoryTest {
     private lateinit var repository: RepoRepository
     private val dao = mock(RepoDao::class.java)
-    private val service = mock(GithubService::class.java)
+    private val service = mock(com.android.example.github.api.GithubService::class.java)
     @Rule
     @JvmField
     val instantExecutorRule = InstantTaskExecutorRule()
@@ -188,9 +188,9 @@ class RepoRepositoryTest {
         val repositories = MutableLiveData<List<Repo>>()
 
         val repoList = arrayListOf(repo1, repo2)
-        val apiResponse = RepoSearchResponse(2, repoList)
+        val apiResponse = com.android.example.github.api.RepoSearchResponse(2, repoList)
 
-        val callLiveData = MutableLiveData<ApiResponse<RepoSearchResponse>>()
+        val callLiveData = MutableLiveData<com.android.example.github.api.ApiResponse<com.android.example.github.api.RepoSearchResponse>>()
         `when`(service.searchRepos("foo")).thenReturn(callLiveData)
 
         `when`(dao.search("foo")).thenReturn(dbSearchResult)
@@ -210,7 +210,7 @@ class RepoRepositoryTest {
         `when`(dao.search("foo")).thenReturn(updatedResult)
         updatedResult.postValue(RepoSearchResult("foo", ids, 2, null))
 
-        callLiveData.postValue(ApiResponse.create(Response.success(apiResponse)))
+        callLiveData.postValue(com.android.example.github.api.ApiResponse.create(Response.success(apiResponse)))
         verify(dao).insertRepos(repoList)
         repositories.postValue(repoList)
         verify(observer).onChanged(Resource.success(repoList))
@@ -220,14 +220,14 @@ class RepoRepositoryTest {
     @Test
     fun search_fromServer_error() {
         `when`(dao.search("foo")).thenReturn(AbsentLiveData.create())
-        val apiResponse = MutableLiveData<ApiResponse<RepoSearchResponse>>()
+        val apiResponse = MutableLiveData<com.android.example.github.api.ApiResponse<com.android.example.github.api.RepoSearchResponse>>()
         `when`(service.searchRepos("foo")).thenReturn(apiResponse)
 
         val observer = mock<Observer<Resource<List<Repo>>>>()
         repository.search("foo").observeForever(observer)
         verify(observer).onChanged(Resource.loading(null))
 
-        apiResponse.postValue(ApiResponse.create(Exception("idk")))
+        apiResponse.postValue(com.android.example.github.api.ApiResponse.create(Exception("idk")))
         verify(observer).onChanged(Resource.error("idk", null))
     }
 }

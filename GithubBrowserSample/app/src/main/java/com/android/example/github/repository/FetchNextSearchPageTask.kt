@@ -32,9 +32,9 @@ import java.io.IOException
  * A task that reads the search result in the database and fetches the next page, if it has one.
  */
 class FetchNextSearchPageTask constructor(
-    private val query: String,
-    private val githubService: GithubService,
-    private val db: GithubDb
+        private val query: String,
+        private val githubService: com.android.example.github.api.GithubService,
+        private val db: GithubDb
 ) : Runnable {
     private val _liveData = MutableLiveData<Resource<Boolean>>()
     val liveData: LiveData<Resource<Boolean>> = _liveData
@@ -52,9 +52,9 @@ class FetchNextSearchPageTask constructor(
         }
         val newValue = try {
             val response = githubService.searchRepos(query, nextPage).execute()
-            val apiResponse = ApiResponse.create(response)
+            val apiResponse = com.android.example.github.api.ApiResponse.create(response)
             when (apiResponse) {
-                is ApiSuccessResponse -> {
+                is com.android.example.github.api.ApiSuccessResponse -> {
                     // we merge all repo ids into 1 list so that it is easier to fetch the
                     // result list.
                     val ids = arrayListOf<Int>()
@@ -75,10 +75,10 @@ class FetchNextSearchPageTask constructor(
                     }
                     Resource.success(apiResponse.nextPage != null)
                 }
-                is ApiEmptyResponse -> {
+                is com.android.example.github.api.ApiEmptyResponse -> {
                     Resource.success(false)
                 }
-                is ApiErrorResponse -> {
+                is com.android.example.github.api.ApiErrorResponse -> {
                     Resource.error(apiResponse.errorMessage, true)
                 }
             }

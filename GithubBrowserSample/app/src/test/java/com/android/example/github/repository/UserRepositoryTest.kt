@@ -39,7 +39,7 @@ import org.mockito.Mockito.verify
 @RunWith(JUnit4::class)
 class UserRepositoryTest {
     private val userDao = mock(UserDao::class.java)
-    private val githubService = mock(GithubService::class.java)
+    private val githubService = mock(com.android.example.github.api.GithubService::class.java)
     private val repo = UserRepository(InstantAppExecutors(), userDao, githubService)
 
     @Rule

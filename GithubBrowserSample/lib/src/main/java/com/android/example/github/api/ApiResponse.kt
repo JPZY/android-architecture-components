@@ -38,8 +38,8 @@ sealed class ApiResponse<T> {
                     ApiEmptyResponse()
                 } else {
                     ApiSuccessResponse(
-                        body = body,
-                        linkHeader = response.headers()?.get("link")
+                            body = body,
+                            linkHeader = response.headers()?.get("link")
                     )
                 }
             } else {

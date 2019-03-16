@@ -74,7 +74,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>
             result.removeSource(apiResponse)
             result.removeSource(dbSource)
             when (response) {
-                is ApiSuccessResponse -> {
+                is com.android.example.github.api.ApiSuccessResponse -> {
                     appExecutors.diskIO().execute {
                         saveCallResult(processResponse(response))
                         appExecutors.mainThread().execute {
@@ -87,7 +87,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>
                         }
                     }
                 }
-                is ApiEmptyResponse -> {
+                is com.android.example.github.api.ApiEmptyResponse -> {
                     appExecutors.mainThread().execute {
                         // reload from disk whatever we had
                         result.addSource(loadFromDb()) { newData ->
@@ -95,7 +95,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>
                         }
                     }
                 }
-                is ApiErrorResponse -> {
+                is com.android.example.github.api.ApiErrorResponse -> {
                     onFetchFailed()
                     result.addSource(dbSource) { newData ->
                         setValue(Resource.error(response.errorMessage, newData))
@@ -110,7 +110,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>
     fun asLiveData() = result as LiveData<Resource<ResultType>>
 
     @WorkerThread
-    protected open fun processResponse(response: ApiSuccessResponse<RequestType>) = response.body
+    protected open fun processResponse(response: com.android.example.github.api.ApiSuccessResponse<RequestType>) = response.body
 
     @WorkerThread
     protected abstract fun saveCallResult(item: RequestType)
@@ -122,5 +122,5 @@ abstract class NetworkBoundResource<ResultType, RequestType>
     protected abstract fun loadFromDb(): LiveData<ResultType>
 
     @MainThread
-    protected abstract fun createCall(): LiveData<ApiResponse<RequestType>>
+    protected abstract fun createCall(): LiveData<com.android.example.github.api.ApiResponse<RequestType>>
 }

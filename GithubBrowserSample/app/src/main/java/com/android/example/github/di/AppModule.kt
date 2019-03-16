@@ -33,13 +33,13 @@ import javax.inject.Singleton
 class AppModule {
     @Singleton
     @Provides
-    fun provideGithubService(): GithubService {
+    fun provideGithubService(): com.android.example.github.api.GithubService {
         return Retrofit.Builder()
             .baseUrl("https://api.github.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(LiveDataCallAdapterFactory())
             .build()
-            .create(GithubService::class.java)
+            .create(com.android.example.github.api.GithubService::class.java)
     }
 
     @Singleton

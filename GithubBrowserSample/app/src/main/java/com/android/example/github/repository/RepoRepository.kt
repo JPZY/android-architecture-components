@@ -48,7 +48,7 @@ class RepoRepository @Inject constructor(
     private val appExecutors: AppExecutors,
     private val db: GithubDb,
     private val repoDao: RepoDao,
-    private val githubService: GithubService
+    private val githubService: com.android.example.github.api.GithubService
 ) {
 
     private val repoListRateLimit = RateLimiter<String>(10, TimeUnit.MINUTES)
@@ -136,9 +136,9 @@ class RepoRepository @Inject constructor(
     }
 
     fun search(query: String): LiveData<Resource<List<Repo>>> {
-        return object : NetworkBoundResource<List<Repo>, RepoSearchResponse>(appExecutors) {
+        return object : NetworkBoundResource<List<Repo>, com.android.example.github.api.RepoSearchResponse>(appExecutors) {
 
-            override fun saveCallResult(item: RepoSearchResponse) {
+            override fun saveCallResult(item: com.android.example.github.api.RepoSearchResponse) {
                 val repoIds = item.items.map { it.id }
                 val repoSearchResult = RepoSearchResult(
                     query = query,
@@ -170,8 +170,8 @@ class RepoRepository @Inject constructor(
 
             override fun createCall() = githubService.searchRepos(query)
 
-            override fun processResponse(response: ApiSuccessResponse<RepoSearchResponse>)
-                    : RepoSearchResponse {
+            override fun processResponse(response: com.android.example.github.api.ApiSuccessResponse<com.android.example.github.api.RepoSearchResponse>)
+                    : com.android.example.github.api.RepoSearchResponse {
                 val body = response.body
                 body.nextPage = response.nextPage
                 return body

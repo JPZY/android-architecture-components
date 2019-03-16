@@ -21,6 +21,7 @@ apply plugin: 'kotlin-kapt'
 
 apply plugin: 'kotlin-allopen'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
+apply plugin: 'androidx.benchmark'
 
 allOpen {
     // allows mocking for classes w/o directly opening them for release builds
@@ -67,6 +68,8 @@ jacoco {
 }
 
 dependencies {
+    implementation project(path: ':lib')
+
     implementation deps.support.app_compat
     implementation deps.support.recyclerview
     implementation deps.support.cardview
@@ -132,7 +135,7 @@ task fullCoverageReport(type: JacocoReport) {
                       '**/*ComponentImpl.class',
                       '**/*SubComponentBuilder.class']
     def debugTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
-    def mainSrc = "${project.projectDir}/src/main/java"
+    def mainSrc = "${project.projectDir}/src/benchmark/java"
 
     sourceDirectories = files([mainSrc])
     classDirectories = files([debugTree])

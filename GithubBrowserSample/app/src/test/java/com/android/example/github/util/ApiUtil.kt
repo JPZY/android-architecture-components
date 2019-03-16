@@ -24,7 +24,7 @@ import retrofit2.Response
 object ApiUtil {
     fun <T : Any> successCall(data: T) = createCall(Response.success(data))
 
-    fun <T : Any> createCall(response: Response<T>) = MutableLiveData<ApiResponse<T>>().apply {
-        value = ApiResponse.create(response)
-    } as LiveData<ApiResponse<T>>
+    fun <T : Any> createCall(response: Response<T>) = MutableLiveData<com.android.example.github.api.ApiResponse<T>>().apply {
+        value = com.android.example.github.api.ApiResponse.create(response)
+    } as LiveData<com.android.example.github.api.ApiResponse<T>>
 }

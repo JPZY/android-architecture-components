@@ -49,7 +49,7 @@ class FetchNextSearchPageTaskTest {
     @JvmField
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private lateinit var service: GithubService
+    private lateinit var service: com.android.example.github.api.GithubService
 
     private lateinit var db: GithubDb
 
@@ -61,7 +61,7 @@ class FetchNextSearchPageTaskTest {
 
     @Before
     fun init() {
-        service = mock(GithubService::class.java)
+        service = mock(com.android.example.github.api.GithubService::class.java)
         db = mock(GithubDb::class.java)
         repoDao = mock(RepoDao::class.java)
         `when`(db.repoDao()).thenReturn(repoDao)
@@ -91,7 +91,7 @@ class FetchNextSearchPageTaskTest {
     fun nextPageWithNull() {
         createDbResult(1)
         val repos = TestUtil.createRepos(10, "a", "b", "c")
-        val result = RepoSearchResponse(10, repos)
+        val result = com.android.example.github.api.RepoSearchResponse(10, repos)
         val call = createCall(result, null)
         `when`(service.searchRepos("foo", 1)).thenReturn(call)
         task.run()
@@ -103,7 +103,7 @@ class FetchNextSearchPageTaskTest {
     fun nextPageWithMore() {
         createDbResult(1)
         val repos = TestUtil.createRepos(10, "a", "b", "c")
-        val result = RepoSearchResponse(10, repos)
+        val result = com.android.example.github.api.RepoSearchResponse(10, repos)
         result.nextPage = 2
         val call = createCall(result, 2)
         `when`(service.searchRepos("foo", 1)).thenReturn(call)
@@ -115,7 +115,7 @@ class FetchNextSearchPageTaskTest {
     @Test
     fun nextPageApiError() {
         createDbResult(1)
-        val call = mock<Call<RepoSearchResponse>>()
+        val call = mock<Call<com.android.example.github.api.RepoSearchResponse>>()
         `when`(call.execute()).thenReturn(
             Response.error(
                 400, ResponseBody.create(
@@ -131,7 +131,7 @@ class FetchNextSearchPageTaskTest {
     @Test
     fun nextPageIOError() {
         createDbResult(1)
-        val call = mock<Call<RepoSearchResponse>>()
+        val call = mock<Call<com.android.example.github.api.RepoSearchResponse>>()
         `when`(call.execute()).thenThrow(IOException("bar"))
         `when`(service.searchRepos("foo", 1)).thenReturn(call)
         task.run()
@@ -146,7 +146,7 @@ class FetchNextSearchPageTaskTest {
         `when`(repoDao.findSearchResult("foo")).thenReturn(result)
     }
 
-    private fun createCall(body: RepoSearchResponse, nextPage: Int?): Call<RepoSearchResponse> {
+    private fun createCall(body: com.android.example.github.api.RepoSearchResponse, nextPage: Int?): Call<com.android.example.github.api.RepoSearchResponse> {
         val headers = if (nextPage == null)
             null
         else
@@ -160,7 +160,7 @@ class FetchNextSearchPageTaskTest {
             Response.success(body)
         else
             Response.success(body, headers)
-        val call = mock<Call<RepoSearchResponse>>()
+        val call = mock<Call<com.android.example.github.api.RepoSearchResponse>>()
         `when`(call.execute()).thenReturn(success)
 
         return call
