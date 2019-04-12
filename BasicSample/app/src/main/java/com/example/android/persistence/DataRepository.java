@@ -16,6 +16,7 @@ public class DataRepository {
     private static DataRepository sInstance;
 
     private final AppDatabase mDatabase;
+    //mediator 中间人
     private MediatorLiveData<List<ProductEntity>> mObservableProducts;
 
     private DataRepository(final AppDatabase database) {
