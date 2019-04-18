@@ -85,4 +85,9 @@ dependencies {
     androidTestImplementation deps.support.v4
     androidTestImplementation deps.support.app_compat
     androidTestImplementation deps.support.design
+
+    //Stetho is a sophisticated debug bridge for Android applications
+//    implementation deps.stetho.stetho
+
+    debugImplementation  deps.databasedebug.databasedebug
 }

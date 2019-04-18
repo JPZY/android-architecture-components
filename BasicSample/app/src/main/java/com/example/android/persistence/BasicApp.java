@@ -17,6 +17,8 @@
 package com.example.android.persistence;
 
 import android.app.Application;
+
+import com.amitshekhar.DebugDB;
 import com.example.android.persistence.db.AppDatabase;
 
 /**
@@ -29,7 +31,8 @@ public class BasicApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        //get the debug address url
+        DebugDB.getAddressLog();
         mAppExecutors = new AppExecutors();
     }
 
